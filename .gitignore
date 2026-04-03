@@ -1,53 +1,16 @@
-```python
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv/
-.ENV
-.python-version
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.log
-*.pot
-*.pyc
-*.pyo
-*.pyd
-*.so
-*.egg-info/
-.eggs/
-.pytest_cache/
-.mypy_cache/
-.hypothesis/
-
-# Environment specific
+```
+# Environment files
 .env
 .env.local
-.env.dev
-.env.test
-.env.prod
-*.env
-.env.*
+*.env.*
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
+# Logs and temporary files
+*.log
 *.tmp
 
-# OS
-.DS_Store
-Thumbs.db
+# Editors
+.vscode/
+
+# Original rules preserved
+*.log
 ```
