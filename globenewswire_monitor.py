@@ -25,11 +25,11 @@ CONFIG = {
     'base_url': 'https://www.globenewswire.com',
     'news_categories': [
         '/news/consumer-products-services',
-        '/news/banks-financial-services',
         '/news/energy',
+        '/news/banks-financial-services',
         '/news/heathcare',
         '/news/industrials-utilities',
-        '/news/technology',
+        '/news/technology-telecom',
     ],
     'output_dir': './news_output',
     'check_interval_minutes': 5,
