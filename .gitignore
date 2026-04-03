@@ -1,0 +1,7 @@
+```gitignore
+# Logs
+*.log
+
+# News output files
+news_output/
+```
