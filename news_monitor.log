@@ -1,0 +1,230 @@
+2026-04-03 11:11:39,631 - INFO - Starting news monitoring run...
+2026-04-03 11:11:40,533 - INFO - Found 5 new articles in /news/consumer-products-services
+2026-04-03 11:11:40,846 - ERROR - Error fetching news from /news/technology: 404 Client Error: Not Found for url: https://www.globenewswire.com/news/technology
+2026-04-03 11:11:41,117 - ERROR - Error fetching news from /news/financial-services: 404 Client Error: Not Found for url: https://www.globenewswire.com/news/financial-services
+2026-04-03 11:11:41,419 - ERROR - Error fetching news from /news/healthcare: 404 Client Error: Not Found for url: https://www.globenewswire.com/news/healthcare
+2026-04-03 11:11:42,431 - INFO - Found 5 new articles in /news/energy
+2026-04-03 11:11:42,732 - ERROR - Error fetching news from /news/industrials: 404 Client Error: Not Found for url: https://www.globenewswire.com/news/industrials
+2026-04-03 11:11:43,014 - ERROR - Error fetching news from /news/materials: 404 Client Error: Not Found for url: https://www.globenewswire.com/news/materials
+2026-04-03 11:11:43,323 - ERROR - Error fetching news from /news/real-estate: 404 Client Error: Not Found for url: https://www.globenewswire.com/news/real-estate
+2026-04-03 11:11:43,635 - ERROR - Error fetching news from /news/utilities: 404 Client Error: Not Found for url: https://www.globenewswire.com/news/utilities
+2026-04-03 11:11:43,930 - ERROR - Error fetching news from /news/telecommunications: 404 Client Error: Not Found for url: https://www.globenewswire.com/news/telecommunications
+2026-04-03 11:11:43,930 - INFO - Total articles to process: 10
+2026-04-03 11:11:44,553 - INFO - Scraped article: Daofu Apricot Blossom Festival Highlights New Cult... - Found tickers: []
+2026-04-03 11:11:44,553 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:11:45,355 - INFO - Scraped article: Hooker Furnishings to Host Fourth Quarter and Full... - Found tickers: ['HOFT']
+2026-04-03 11:11:45,355 - INFO - Saved article to HOFT.txt
+2026-04-03 11:11:46,553 - INFO - Scraped article: Ontex roept haar gewone algemene aandeelhoudersver... - Found tickers: []
+2026-04-03 11:11:46,554 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:11:47,258 - INFO - Scraped article: Ontex convenes its annual general shareholders’ me... - Found tickers: []
+2026-04-03 11:11:47,259 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:11:48,277 - INFO - Scraped article: Tận hưởng bữa tiệc thời trang với chủ đề “One Car ... - Found tickers: []
+2026-04-03 11:11:48,278 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:11:49,130 - INFO - Scraped article: Convening Notice to Syensqo Ordinary Shareholders’... - Found tickers: []
+2026-04-03 11:11:49,131 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:11:50,275 - INFO - Scraped article: Mattr Announces Closing of Credit Facility Extensi... - Found tickers: []
+2026-04-03 11:11:50,276 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:11:51,232 - INFO - Scraped article: 2026 Annual General Meeting... - Found tickers: []
+2026-04-03 11:11:51,233 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:11:52,138 - INFO - Scraped article: Range Announces Conference Call to Discuss First Q... - Found tickers: ['RRC']
+2026-04-03 11:11:52,139 - INFO - Saved article to RRC.txt
+2026-04-03 11:11:53,256 - INFO - Scraped article: Umicore - Transparantieverklaring van BlackRock, I... - Found tickers: []
+2026-04-03 11:11:53,257 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:11:53,257 - INFO - Completed run. Processed 10 new articles.
+2026-04-03 11:12:42,692 - INFO - Starting news monitoring run...
+2026-04-03 11:12:43,217 - INFO - Found 8 new articles in /news/consumer-products-services
+2026-04-03 11:12:43,998 - INFO - Found 8 new articles in /news/banks-financial-services
+2026-04-03 11:12:44,736 - INFO - Found 8 new articles in /news/energy
+2026-04-03 11:12:45,217 - INFO - Found 8 new articles in /news/heathcare
+2026-04-03 11:12:45,831 - INFO - Found 8 new articles in /news/industrials-utilities
+2026-04-03 11:12:46,143 - ERROR - Error fetching news from /news/technology: 404 Client Error: Not Found for url: https://www.globenewswire.com/news/technology
+2026-04-03 11:12:46,143 - INFO - Total articles to process: 40
+2026-04-03 11:12:47,176 - INFO - Scraped article: Daofu Apricot Blossom Festival Highlights New Cult... - Found tickers: []
+2026-04-03 11:12:47,176 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:47,772 - INFO - Scraped article: Hooker Furnishings to Host Fourth Quarter and Full... - Found tickers: ['HOFT']
+2026-04-03 11:12:47,772 - INFO - Saved article to HOFT.txt
+2026-04-03 11:12:48,522 - INFO - Scraped article: Ontex roept haar gewone algemene aandeelhoudersver... - Found tickers: []
+2026-04-03 11:12:48,530 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:49,219 - INFO - Scraped article: Ontex convenes its annual general shareholders’ me... - Found tickers: []
+2026-04-03 11:12:49,220 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:50,397 - INFO - Scraped article: Tận hưởng bữa tiệc thời trang với chủ đề “One Car ... - Found tickers: []
+2026-04-03 11:12:50,398 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:51,056 - INFO - Scraped article: Enjoy a Fashion Spectacle Inspired by “One Car Two... - Found tickers: []
+2026-04-03 11:12:51,057 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:51,554 - INFO - Scraped article: For Long Underwriting Co., Ltd. Launches Enhanced ... - Found tickers: []
+2026-04-03 11:12:51,554 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:52,075 - INFO - Scraped article: Get Lost Pest Control Announces Free First Appoint... - Found tickers: []
+2026-04-03 11:12:52,075 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:52,917 - INFO - Scraped article: AH Realty Trust to Report First Quarter Earnings o... - Found tickers: ['AHRT']
+2026-04-03 11:12:52,917 - INFO - Saved article to AHRT.txt
+2026-04-03 11:12:53,515 - INFO - Scraped article: Déclaration hebdomadaire des transactions sur CCI ... - Found tickers: []
+2026-04-03 11:12:53,516 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:54,271 - INFO - Scraped article: Dimensional Fund Advisors Ltd. : Form 8.3 - NCC GR... - Found tickers: []
+2026-04-03 11:12:54,272 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:55,371 - INFO - Scraped article: Dimensional Fund Advisors Ltd. : Form 8.3 - BRITIS... - Found tickers: []
+2026-04-03 11:12:55,371 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:56,211 - INFO - Scraped article: Progress on ABN AMRO share buyback programme 27 Ma... - Found tickers: []
+2026-04-03 11:12:56,211 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:56,852 - INFO - Scraped article: New Crypto Pepeto Binance Listing Update Following... - Found tickers: []
+2026-04-03 11:12:56,852 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:57,659 - INFO - Scraped article: Crypto News On Pepeto Project advancement And BNB ... - Found tickers: []
+2026-04-03 11:12:57,659 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:58,145 - INFO - Scraped article: Ethereum Based Crypto Pepeto Updates Bridge on Bin... - Found tickers: []
+2026-04-03 11:12:58,146 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:59,020 - INFO - Scraped article: Convening Notice to Syensqo Ordinary Shareholders’... - Found tickers: []
+2026-04-03 11:12:59,020 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:12:59,918 - INFO - Scraped article: Mattr Announces Closing of Credit Facility Extensi... - Found tickers: []
+2026-04-03 11:12:59,919 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:00,956 - INFO - Scraped article: 2026 Annual General Meeting... - Found tickers: []
+2026-04-03 11:13:00,956 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:01,856 - INFO - Scraped article: Range Announces Conference Call to Discuss First Q... - Found tickers: ['RRC']
+2026-04-03 11:13:01,856 - INFO - Saved article to RRC.txt
+2026-04-03 11:13:02,818 - INFO - Scraped article: Umicore - Transparantieverklaring van BlackRock, I... - Found tickers: []
+2026-04-03 11:13:02,818 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:03,819 - INFO - Scraped article: Umicore - Déclaration de transparence par BlackRoc... - Found tickers: []
+2026-04-03 11:13:03,820 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:04,538 - INFO - Scraped article: Umicore - Transparency notification by BlackRock, ... - Found tickers: []
+2026-04-03 11:13:04,539 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:05,256 - INFO - Scraped article: Minerals Technologies Inc. Announces First Quarter... - Found tickers: ['MTX']
+2026-04-03 11:13:05,257 - INFO - Saved article to MTX.txt
+2026-04-03 11:13:05,474 - INFO - Scraped article: BioCryst Reports Inducement Grants Under Nasdaq Li... - Found tickers: ['BCRX', 'LISTI']
+2026-04-03 11:13:05,475 - INFO - Saved article to BCRX.txt
+2026-04-03 11:13:05,475 - INFO - Saved article to LISTI.txt
+2026-04-03 11:13:06,257 - INFO - Scraped article: Déclaration d'actions et de droits de vote de la s... - Found tickers: []
+2026-04-03 11:13:06,257 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:07,177 - INFO - Scraped article: Declaration of shares and voting rights of Valneva... - Found tickers: []
+2026-04-03 11:13:07,177 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:08,012 - INFO - Scraped article: Ipsen annonce l’obtention par Beech Tree d’une dér... - Found tickers: []
+2026-04-03 11:13:08,014 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:08,778 - INFO - Scraped article: Ipsen announces that Beech Tree has obtained an ex... - Found tickers: []
+2026-04-03 11:13:08,779 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:09,976 - INFO - Scraped article: Conavi Medical Announces Results from Its Annual G... - Found tickers: []
+2026-04-03 11:13:09,977 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:10,778 - INFO - Scraped article: NewAmsterdam Pharma Reports Inducement Grants Unde... - Found tickers: ['LISTI', 'NAMS', 'STOCK']
+2026-04-03 11:13:10,778 - INFO - Saved article to LISTI.txt
+2026-04-03 11:13:10,779 - INFO - Saved article to NAMS.txt
+2026-04-03 11:13:10,779 - INFO - Saved article to STOCK.txt
+2026-04-03 11:13:11,731 - INFO - Scraped article: Regeneron Collaborates with TriNetX to Access De-I... - Found tickers: ['REGN']
+2026-04-03 11:13:11,731 - INFO - Saved article to REGN.txt
+2026-04-03 11:13:11,955 - INFO - Scraped article: Plug Power CEO Jose Luis Crespo to Host Reddit AMA... - Found tickers: ['PLUG']
+2026-04-03 11:13:11,955 - INFO - Saved article to PLUG.txt
+2026-04-03 11:13:12,171 - INFO - Scraped article: Alta Equipment Group Announces Preferred Stock Div... - Found tickers: ['ALTG']
+2026-04-03 11:13:12,171 - INFO - Saved article to ALTG.txt
+2026-04-03 11:13:12,954 - INFO - Scraped article: Crossing the Privacy Divide: Dmitry Shubov Speaks ... - Found tickers: []
+2026-04-03 11:13:12,954 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:14,292 - INFO - Scraped article: Bekanntgabe der Referenten für The Battery Show Eu... - Found tickers: []
+2026-04-03 11:13:14,293 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:15,300 - INFO - Scraped article: Annonce des intervenants pour The Battery Show Eur... - Found tickers: []
+2026-04-03 11:13:15,300 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:15,761 - INFO - Scraped article: SPIE SA : mise à disposition du Document d’Enregis... - Found tickers: []
+2026-04-03 11:13:15,762 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:16,496 - INFO - Scraped article: SPIE SA announces the publication of its 2025 Univ... - Found tickers: []
+2026-04-03 11:13:16,497 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:17,472 - INFO - Scraped article: Bekaert - Update over het Inkoopprogramma van Eige... - Found tickers: []
+2026-04-03 11:13:17,473 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:13:17,474 - INFO - Completed run. Processed 40 new articles.
+2026-04-03 11:13:26,577 - INFO - Loaded 40 previously processed URLs
+2026-04-03 11:13:26,577 - INFO - Searching for news about: Tesla
+2026-04-03 11:13:28,017 - INFO - Scraped article: Wix Announces Final Results of Modified Dutch Auct... - Found tickers: ['WIX']
+2026-04-03 11:13:28,253 - INFO - Scraped article: Village Farms Announces Succession Plan for Chief ... - Found tickers: ['STOCK', 'VFF']
+2026-04-03 11:13:28,295 - INFO - Scraped article: Plug Power CEO Jose Luis Crespo to Host Reddit AMA... - Found tickers: ['PLUG']
+2026-04-03 11:13:28,553 - INFO - Scraped article: Multi-Sensor Data Labeling and AI Data Operations:... - Found tickers: ['TU']
+2026-04-03 11:13:28,611 - INFO - Scraped article: BioCryst Reports Inducement Grants Under Nasdaq Li... - Found tickers: ['BCRX', 'LISTI']
+2026-04-03 11:13:28,656 - INFO - Scraped article: Alta Equipment Group Announces Preferred Stock Div... - Found tickers: ['ALTG']
+2026-04-03 11:13:28,715 - INFO - Scraped article: Daofu Apricot Blossom Festival Highlights New Cult... - Found tickers: []
+2026-04-03 11:13:29,476 - INFO - Scraped article: $EOSE Stock News: Eos Energy Investors Bring Secur... - Found tickers: ['EOSE']
+2026-04-03 11:13:29,712 - INFO - Scraped article: $TNC Stock News: Tennant Company Investigated for ... - Found tickers: ['TNC']
+2026-04-03 11:13:30,832 - INFO - Scraped article: $ADMA Stock News: ADMA Biologics Investigated for ... - Found tickers: ['ADMA']
+2026-04-03 11:48:48,176 - INFO - Loaded 40 previously processed URLs
+2026-04-03 11:48:48,177 - INFO - Starting news monitoring run...
+2026-04-03 11:48:48,896 - INFO - Found 3 new articles in /news/consumer-products-services
+2026-04-03 11:48:49,554 - INFO - Found 0 new articles in /news/energy
+2026-04-03 11:48:50,273 - INFO - Found 1 new articles in /news/banks-financial-services
+2026-04-03 11:48:50,495 - INFO - Found 1 new articles in /news/heathcare
+2026-04-03 11:48:51,332 - INFO - Found 0 new articles in /news/industrials-utilities
+2026-04-03 11:48:51,895 - INFO - Found 7 new articles in /news/technology-telecom
+2026-04-03 11:48:51,895 - INFO - Total articles to process: 12
+2026-04-03 11:48:52,120 - INFO - Scraped article: Nel nome dell'eleganza, un dialogo con il futuro |... - Found tickers: []
+2026-04-03 11:48:52,121 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:48:52,335 - INFO - Scraped article: Thousands of AI-generated “personalities” around t... - Found tickers: []
+2026-04-03 11:48:52,336 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:48:53,232 - INFO - Scraped article: Halper Sadeh LLC is Investigating Whether UNF, CYC... - Found tickers: ['CYCN', 'NSA', 'UNF']
+2026-04-03 11:48:53,233 - INFO - Saved article to CYCN.txt
+2026-04-03 11:48:53,233 - INFO - Saved article to NSA.txt
+2026-04-03 11:48:53,233 - INFO - Saved article to UNF.txt
+2026-04-03 11:48:53,490 - INFO - Scraped article: Figure Technology Solutions Reports Preliminary Ma... - Found tickers: ['FIGR']
+2026-04-03 11:48:53,491 - INFO - Saved article to FIGR.txt
+2026-04-03 11:48:53,697 - INFO - Scraped article: Kura Oncology Reports Inducement Grants Under Nasd... - Found tickers: ['KURA', 'LISTI']
+2026-04-03 11:48:53,698 - INFO - Saved article to KURA.txt
+2026-04-03 11:48:53,698 - INFO - Saved article to LISTI.txt
+2026-04-03 11:48:54,494 - INFO - Scraped article: Wix Announces Final Results of Modified Dutch Auct... - Found tickers: ['WIX']
+2026-04-03 11:48:54,495 - INFO - Saved article to WIX.txt
+2026-04-03 11:48:55,413 - INFO - Scraped article: Convocation à l’Assemblée Générale des Actionnaire... - Found tickers: []
+2026-04-03 11:48:55,414 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:48:56,757 - INFO - Scraped article: Bijeenroeping van de Algemene Vergadering van Aand... - Found tickers: []
+2026-04-03 11:48:56,757 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:48:57,523 - INFO - Scraped article: Notice to the General Meeting of Shareholders... - Found tickers: []
+2026-04-03 11:48:57,530 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:48:58,576 - INFO - Scraped article: Information mensuelle relative au nombre total de ... - Found tickers: []
+2026-04-03 11:48:58,576 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:48:59,578 - INFO - Scraped article: naoo AG bestätigt erfolgreichen Rollout der Genera... - Found tickers: []
+2026-04-03 11:48:59,579 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:49:01,054 - INFO - Scraped article: naoo AG Confirms Successful Full-Platform Rollout ... - Found tickers: []
+2026-04-03 11:49:01,054 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:49:01,055 - INFO - Completed run. Processed 12 new articles.
+2026-04-03 11:59:22,916 - INFO - Loaded 52 previously processed URLs
+2026-04-03 11:59:22,916 - INFO - Starting news monitoring run...
+2026-04-03 11:59:23,190 - INFO - Found 0 new articles in /news/consumer-products-services
+2026-04-03 11:59:23,921 - INFO - Found 0 new articles in /news/energy
+2026-04-03 11:59:24,592 - INFO - Found 1 new articles in /news/banks-financial-services
+2026-04-03 11:59:24,999 - INFO - Found 0 new articles in /news/heathcare
+2026-04-03 11:59:25,854 - INFO - Found 0 new articles in /news/industrials-utilities
+2026-04-03 11:59:26,335 - INFO - Found 0 new articles in /news/technology-telecom
+2026-04-03 11:59:26,335 - INFO - Total articles to process: 1
+2026-04-03 11:59:26,757 - INFO - Scraped article: Déclaration des opérations de rachat d'actions réa... - Found tickers: []
+2026-04-03 11:59:26,757 - INFO - Saved article without tickers to UNKNOWN.txt
+2026-04-03 11:59:26,758 - INFO - Completed run. Processed 1 new articles.
+2026-04-03 12:16:04,338 - INFO - Loaded 53 previously processed URLs
+2026-04-03 12:16:04,342 - INFO - Downloading ticker database from official sources...
+2026-04-03 12:16:04,342 - INFO - Fetching NASDAQ list...
+2026-04-03 12:16:06,514 - INFO - Fetching NYSE list...
+2026-04-03 12:16:08,831 - ERROR - Error downloading ticker database: Error tokenizing data. C error: Expected 1 fields in line 14, saw 3
+
+2026-04-03 12:16:13,857 - INFO - Loaded 53 previously processed URLs
+2026-04-03 12:16:13,857 - INFO - Starting news monitoring run...
+2026-04-03 12:16:13,857 - WARNING - Local ticker database not found.
+2026-04-03 12:16:13,857 - WARNING - Ticker database empty. Attempting to download...
+2026-04-03 12:16:13,857 - INFO - Downloading ticker database from official sources...
+2026-04-03 12:16:13,857 - INFO - Fetching NASDAQ list...
+2026-04-03 12:16:15,556 - INFO - Fetching NYSE list...
+2026-04-03 12:16:17,943 - ERROR - Error downloading ticker database: Error tokenizing data. C error: Expected 1 fields in line 14, saw 3
+
+2026-04-03 12:16:17,943 - ERROR - Could not initialize ticker database. Exiting.
+2026-04-03 12:16:58,657 - INFO - Loaded 53 previously processed URLs
+2026-04-03 12:16:58,658 - INFO - Starting news monitoring run...
+2026-04-03 12:16:58,658 - WARNING - Local ticker database not found.
+2026-04-03 12:16:58,658 - WARNING - Ticker database empty. Attempting to download...
+2026-04-03 12:16:58,658 - INFO - Downloading ticker database from official sources...
+2026-04-03 12:16:58,658 - INFO - Fetching NASDAQ list...
+2026-04-03 12:17:02,735 - INFO - Fetching NYSE list...
+2026-04-03 12:17:07,936 - INFO - Database saved to ticker_database.csv. Total records: 5414
+2026-04-03 12:17:08,553 - INFO - Found 2 new articles in /news/consumer-products-services
+2026-04-03 12:17:08,914 - INFO - Found 0 new articles in /news/energy
+2026-04-03 12:17:09,150 - INFO - Found 0 new articles in /news/banks-financial-services
+2026-04-03 12:17:09,891 - INFO - Found 2 new articles in /news/heathcare
+2026-04-03 12:17:10,773 - INFO - Found 0 new articles in /news/industrials-utilities
+2026-04-03 12:17:11,631 - INFO - Found 0 new articles in /news/technology-telecom
+2026-04-03 12:17:11,632 - INFO - Total articles to process: 4
+2026-04-03 12:17:11,911 - INFO - Scraped: Lotus Showcases Emira Racing Line Edition at the N... | Source: Lotus Technology Inc.
+2026-04-03 12:17:11,911 - INFO - Matched 'Lotus Technology Inc.' -> Ticker: LOT
+2026-04-03 12:17:11,912 - INFO - Saved article to LOT.txt
+2026-04-03 12:17:13,058 - INFO - Scraped: AMPLIFY Chief Strategy Officer Aron Solomon, JD, t... | Source: Amplify, Digital Marketing for Lawyers
+2026-04-03 12:17:13,073 - INFO - Matched 'Amplify, Digital Marketing for Lawyers' -> Ticker: APPS
+2026-04-03 12:17:13,073 - INFO - Saved article to APPS.txt
+2026-04-03 12:17:14,156 - INFO - Scraped: MBX Biosciences Reports Inducement Grant Under Nas... | Source: MBX Biosciences, Inc.
+2026-04-03 12:17:14,156 - INFO - Matched 'MBX Biosciences, Inc.' -> Ticker: MBX
+2026-04-03 12:17:14,156 - INFO - Saved article to MBX.txt
+2026-04-03 12:17:14,978 - INFO - Scraped: Taysha Gene Therapies Announces Inducement Grant U... | Source: Taysha Gene Therapies, Inc.
+2026-04-03 12:17:14,978 - INFO - Matched 'Taysha Gene Therapies, Inc.' -> Ticker: TSHA
+2026-04-03 12:17:14,978 - INFO - Saved article to TSHA.txt
+2026-04-03 12:17:14,992 - INFO - Completed run. Processed 4 articles, matched 4 companies.
