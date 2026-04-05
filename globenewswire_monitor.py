@@ -1,527 +1,609 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-GlobeNewswire Real-Time News Monitor
-
-Мониторит новости с GlobeNewswire, извлекает компанию из поля "Source",
-сверяет с базой тикеров (NASDAQ/NYSE) и сохраняет новости в файлы <TICKER>.txt
+GlobeNewswire Real-Time Monitor with Finviz Integration
+Архитектура:
+- Умный поллинг с алгоритмом "дожима" (burst detection)
+- Защита от блокировок (User-Agent ротация, задержки, обработка ошибок)
+- Хранение новостей в папках по тикерам (news/TICKER/news_ID.json)
+- Профиль компании с Finviz обновляется 1 раз в сутки
+- База тикеров NASDAQ/NYSE/AMEX обновляется 1 раз в сутки
 """
 
 import os
-import re
-import time
+import sys
 import json
+import time
+import random
 import logging
-from datetime import datetime
+import hashlib
+from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Optional, Set, Dict, List
-from dataclasses import dataclass
+from typing import Dict, List, Optional, Any, Set
 
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
-import schedule
 
-# Конфигурация
+# --- КОНФИГУРАЦИЯ ---
 CONFIG = {
-    'base_url': 'https://www.globenewswire.com',
-    'news_categories': [
-        '/news/consumer-products-services',
-        '/news/energy',
-        '/news/banks-financial-services',
-        '/news/heathcare',
-        '/news/industrials-utilities',
-        '/news/technology-telecom',
-    ],
-    'output_dir': './news_output',
-    'check_interval_minutes': 5,
-    'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'max_news_per_run': 50,
-    'ticker_db_file': 'ticker_database.csv',
+    "dirs": {
+        "data": "data",
+        "news_root": "news",
+        "cache": "cache"
+    },
+    "files": {
+        "tickers_db": "tickers_db.json",
+        "processed_news": "processed_news.json",
+        "last_ticker_update": "last_ticker_update.txt"
+    },
+    "limits": {
+        "ticker_cache_hours": 24,
+        "profile_cache_hours": 24,
+        "max_burst_checks": 5,       # Сколько раз проверить "на всякий случай" после находки
+        "burst_delay_sec": 1.5,      # Пауза между проверками при burst
+        "request_timeout": 10,
+        "retry_attempts": 3
+    },
+    "urls": {
+        "nasdaq": "https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=10000&exchange=nasdaq&download=true",
+        "nyse": "https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=10000&exchange=nyse&download=true",
+        "amex": "https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=10000&exchange=amex&download=true",
+        "categories": [
+            "/news/consumer-products-services",
+            "/news/banks-financial-services",
+            "/news/energy",
+            "/news/heathcare",
+            "/news/industrials-utilities",
+            "/news/technology-telecom"
+        ]
+    },
+    "headers_base": {
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection": "keep-alive",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Cache-Control": "max-age=0"
+    }
 }
 
+# Пользователи для ротации (эмуляция разных браузеров/ОС)
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+]
 
-@dataclass
-class NewsArticle:
-    """Представляет новость"""
-    title: str
-    url: str
-    published_date: str
-    content: str
-    source_company: str  # Компания из поля Source
-    ticker: Optional[str] = None
-    scraped_at: str = None
-    
-    def __post_init__(self):
-        if self.scraped_at is None:
-            self.scraped_at = datetime.utcnow().isoformat()
-
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler("monitor.log", encoding='utf-8')
+    ]
+)
+logger = logging.getLogger(__name__)
 
 class TickerDatabase:
-    """База данных тикеров и компаний"""
+    """Управление базой тикеров и сопоставление названий."""
     
-    def __init__(self, db_path: str):
-        self.db_path = db_path
-        self.df: Optional[pd.DataFrame] = None
-        self.company_to_ticker: Dict[str, str] = {}
+    def __init__(self, data_dir: str):
+        self.data_dir = Path(data_dir)
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        self.db_path = self.data_dir / CONFIG["files"]["tickers_db"]
+        self.timestamp_path = self.data_dir / CONFIG["files"]["last_ticker_update"]
+        self.tickers: Dict[str, str] = {} # Name -> Ticker
+        self.ticker_info: Dict[str, dict] = {} # Ticker -> Info
         
-    def download_database(self) -> bool:
-        """Скачивает актуальные списки тикеров NASDAQ и NYSE"""
-        logging.info("Downloading ticker database from official sources...")
-        
-        nasdaq_url = "http://www.nasdaqtrader.com/dynamic/symdir/nasdaqlisted.txt"
-        nyse_url = "http://www.nasdaqtrader.com/dynamic/symdir/nyseotherlisted.txt"
-        
-        all_data = []
-        
+    def is_stale(self) -> bool:
+        """Проверка актуальности базы."""
+        if not self.timestamp_path.exists():
+            return True
         try:
-            # Скачиваем NASDAQ
-            logging.info("Fetching NASDAQ list...")
-            df_nasdaq = pd.read_csv(nasdaq_url, sep='|', skiprows=lambda x: x > 0 and not str(x).isdigit(), on_bad_lines='skip')
-            # Читаем как простой текст с разделителем |
-            try:
-                df_nasdaq = pd.read_csv(nasdaq_url, sep='|')
-            except:
-                # Если не получается, читаем построчно
-                import io
-                response = requests.get(nasdaq_url, timeout=10)
-                lines = response.text.split('\n')
-                valid_lines = []
-                for line in lines:
-                    parts = line.split('|')
-                    if len(parts) >= 2:
-                        valid_lines.append(line)
-                if valid_lines:
-                    df_nasdaq = pd.read_csv(io.StringIO('\n'.join(valid_lines)), sep='|')
-                else:
-                    df_nasdaq = None
-            
-            if df_nasdaq is not None and 'Symbol' in df_nasdaq.columns and 'Security Name' in df_nasdaq.columns:
-                df_nasdaq = df_nasdaq[['Symbol', 'Security Name']].copy()
-                df_nasdaq['Exchange'] = 'NASDAQ'
-                all_data.append(df_nasdaq)
-                
-            # Скачиваем NYSE
-            logging.info("Fetching NYSE list...")
-            try:
-                df_nyse = pd.read_csv(nyse_url, sep='|')
-            except:
-                import io
-                response = requests.get(nyse_url, timeout=10)
-                lines = response.text.split('\n')
-                valid_lines = []
-                for line in lines:
-                    parts = line.split('|')
-                    if len(parts) >= 2:
-                        valid_lines.append(line)
-                if valid_lines:
-                    df_nyse = pd.read_csv(io.StringIO('\n'.join(valid_lines)), sep='|')
-                else:
-                    df_nyse = None
-                    
-            if df_nyse is not None and 'ACT Symbol' in df_nyse.columns and 'Security Name' in df_nyse.columns:
-                df_nyse = df_nyse.rename(columns={'ACT Symbol': 'Symbol'})
-                df_nyse = df_nyse[['Symbol', 'Security Name']].copy()
-                df_nyse['Exchange'] = 'NYSE'
-                all_data.append(df_nyse)
-            
-            if all_data:
-                self.df = pd.concat(all_data, ignore_index=True)
-                self._build_index()
-                self.df.to_csv(self.db_path, index=False)
-                logging.info(f"Database saved to {self.db_path}. Total records: {len(self.df)}")
-                return True
-            else:
-                logging.error("Failed to parse ticker data from source.")
-                return False
-                
-        except Exception as e:
-            logging.error(f"Error downloading ticker database: {e}")
-            if os.path.exists(self.db_path):
-                logging.info("Loading existing local database...")
-                self.load_local()
-                return True
-            return False
+            last_update = datetime.fromisoformat(self.timestamp_path.read_text())
+            return datetime.now() - last_update > timedelta(hours=CONFIG["limits"]["ticker_cache_hours"])
+        except Exception:
+            return True
 
-    def load_local(self) -> bool:
-        """Загружает базу из локального файла"""
-        if not os.path.exists(self.db_path):
-            logging.warning("Local ticker database not found.")
+    def load(self) -> bool:
+        """Загрузка базы из файла."""
+        if not self.db_path.exists():
             return False
-        
         try:
-            self.df = pd.read_csv(self.db_path)
-            self._build_index()
-            logging.info(f"Loaded {len(self.df)} tickers from local database.")
+            data = json.loads(self.db_path.read_text(encoding='utf-8'))
+            self.tickers = data.get("name_to_ticker", {})
+            self.ticker_info = data.get("ticker_info", {})
+            logger.info(f"Loaded {len(self.tickers)} tickers from cache.")
             return True
         except Exception as e:
-            logging.error(f"Error loading local database: {e}")
+            logger.error(f"Error loading ticker DB: {e}")
             return False
 
-    def _normalize_name(self, name: str) -> str:
-        """Нормализует название компании для поиска"""
-        if not isinstance(name, str):
-            return ""
+    def save(self):
+        """Сохранение базы в файл."""
+        data = {
+            "name_to_ticker": self.tickers,
+            "ticker_info": self.ticker_info,
+            "updated_at": datetime.now().isoformat()
+        }
+        with open(self.db_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+        self.timestamp_path.write_text(datetime.now().isoformat())
+        logger.info(f"Saved {len(self.tickers)} tickers to cache.")
+
+    def fetch_from_nasdaq_api(self) -> bool:
+        """Скачивание данных с API NASDAQ."""
+        session = self._create_session()
+        all_rows = []
         
-        suffixes = [
-            " inc", " corp", " ltd", " llc", " co", 
-            " company", " corporation", " limited", 
-            " plc", " gmbh", " ag", " sa", " nv"
+        exchanges = [
+            ("NASDAQ", CONFIG["urls"]["nasdaq"]),
+            ("NYSE", CONFIG["urls"]["nyse"]),
+            ("AMEX", CONFIG["urls"]["amex"])
         ]
         
-        clean = name.lower().strip()
-        clean = re.sub(r'[^\w\s]', '', clean)
+        for ex_name, url in exchanges:
+            try:
+                logger.info(f"Fetching {ex_name} data...")
+                headers = session.headers.copy()
+                headers.update({
+                    "Referer": "https://www.nasdaq.com/",
+                    "Origin": "https://www.nasdaq.com"
+                })
+                resp = session.get(url, headers=headers, timeout=30)
+                resp.raise_for_status()
+                data = resp.json()
+                
+                if "data" in data and "rows" in data["data"]:
+                    rows = data["data"]["rows"]
+                    logger.info(f"Got {len(rows)} rows from {ex_name}")
+                    all_rows.extend(rows)
+                else:
+                    logger.warning(f"No data found in response from {ex_name}")
+                    
+            except Exception as e:
+                logger.error(f"Failed to fetch {ex_name}: {e}")
         
-        for suffix in suffixes:
-            if clean.endswith(suffix):
-                clean = clean[:-len(suffix)].strip()
-        
-        return clean
-
-    def _build_index(self):
-        """Строит индекс для быстрого поиска"""
-        self.company_to_ticker = {}
-        if self.df is None:
-            return
-
-        for _, row in self.df.iterrows():
-            symbol = row['Symbol']
-            name = row['Security Name']
+        if not all_rows:
+            return False
             
-            clean_name = self._normalize_name(name)
-            self.company_to_ticker[clean_name] = symbol
-            
-            # Добавляем частичные совпадения
-            parts = clean_name.split()
-            for i in range(1, len(parts) + 1):
-                partial = " ".join(parts[:i])
-                if partial not in self.company_to_ticker:
-                    self.company_to_ticker[partial] = symbol
+        # Обработка данных
+        for row in all_rows:
+            symbol = row.get("symbol")
+            name = row.get("name")
+            if symbol and name:
+                clean_name = " ".join(name.split()) 
+                self.tickers[clean_name] = symbol
+                self.ticker_info[symbol] = {
+                    "name": name,
+                    "exchange": row.get("exchange", ""),
+                    "sector": row.get("sector", ""),
+                    "industry": row.get("industry", "")
+                }
+                
+        self.save()
+        return True
 
     def find_ticker(self, source_name: str) -> Optional[str]:
-        """Ищет тикер по названию компании из Source"""
-        if not source_name or not self.company_to_ticker:
+        """Поиск тикера по названию компании из Source."""
+        if not source_name:
             return None
             
-        clean_source = self._normalize_name(source_name)
+        clean_source = " ".join(source_name.split())
         
-        # Точное совпадение
-        if clean_source in self.company_to_ticker:
-            return self.company_to_ticker[clean_source]
+        # Прямое совпадение
+        if clean_source in self.tickers:
+            return self.tickers[clean_source]
             
-        # Поиск по подстроке (самое длинное совпадение)
-        best_match = None
-        max_len = 0
+        # Пробуем убрать суффиксы типа Ltd, Inc, Corp, PLC, SA, AG и т.д.
+        suffixes = [
+            " Ltd.", " Ltd", " Inc.", " Inc", " Corp.", " Corp", " Corporation",
+            " PLC", " Plc", " S.A.", " SA", " AG", " GmbH", " Holdings", 
+            " Group", " The", " Co.", " Co", " L.P.", " LP", " N.V.", " NV"
+        ]
         
-        for db_name, ticker in self.company_to_ticker.items():
-            if db_name in clean_source or clean_source in db_name:
-                if len(db_name) > max_len:
-                    max_len = len(db_name)
-                    best_match = ticker
+        base_name = clean_source
+        for suf in suffixes:
+            if base_name.endswith(suf):
+                base_name = base_name[:-len(suf)].strip()
+                if base_name in self.tickers:
+                    return self.tickers[base_name]
         
-        return best_match
+        return None
+
+    def _create_session(self) -> requests.Session:
+        session = requests.Session()
+        ua = random.choice(USER_AGENTS)
+        session.headers.update(CONFIG["headers_base"])
+        session.headers["User-Agent"] = ua
+        return session
+
+
+class NewsHistory:
+    """Хранение истории обработанных новостей в JSON."""
+    
+    def __init__(self, data_dir: str):
+        self.file_path = Path(data_dir) / CONFIG["files"]["processed_news"]
+        self.urls: Set[str] = set()
+        self.load()
+        
+    def load(self):
+        if self.file_path.exists():
+            try:
+                data = json.loads(self.file_path.read_text(encoding='utf-8'))
+                self.urls = set(data.get("urls", []))
+                logger.info(f"Loaded {len(self.urls)} processed URLs from history.")
+            except Exception as e:
+                logger.error(f"Error loading history: {e}")
+                self.urls = set()
+        else:
+            logger.info("No history file found. Starting fresh.")
+            
+    def save(self):
+        data = {"urls": list(self.urls), "count": len(self.urls), "updated_at": datetime.now().isoformat()}
+        with open(self.file_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2)
+            
+    def is_processed(self, url: str) -> bool:
+        return url in self.urls
+    
+    def add(self, url: str):
+        self.urls.add(url)
+        
+    def cleanup_old(self, max_keep: int = 50000):
+        """Ограничение размера файла истории."""
+        if len(self.urls) > max_keep:
+            lst = list(self.urls)
+            self.urls = set(lst[-max_keep:])
+            self.save()
+            logger.info(f"Cleaned up history to {max_keep} entries.")
+
+
+class FinvizScraper:
+    """Скрапинг данных с Finviz с защитой."""
+    
+    def __init__(self, news_root: str):
+        self.news_root = Path(news_root)
+        
+    def get_profile_path(self, ticker: str) -> Path:
+        # Профиль храним в папке тикера: news/TICKER/profile.json
+        ticker_dir = self.news_root / ticker
+        return ticker_dir / "profile.json"
+
+    def should_update(self, ticker: str) -> bool:
+        path = self.get_profile_path(ticker)
+        if not path.exists():
+            return True
+        try:
+            mtime = datetime.fromtimestamp(path.stat().st_mtime)
+            return datetime.now() - mtime > timedelta(hours=CONFIG["limits"]["profile_cache_hours"])
+        except Exception:
+            return True
+
+    def fetch(self, ticker: str) -> Optional[Dict[str, Any]]:
+        """Парсинг страницы Finviz."""
+        url = f"https://finviz.com/quote.ashx?t={ticker}"
+        session = requests.Session()
+        
+        ua = random.choice(USER_AGENTS)
+        session.headers.update(CONFIG["headers_base"])
+        session.headers["User-Agent"] = ua
+        session.headers["Referer"] = "https://www.google.com/"
+        
+        try:
+            logger.info(f"Fetching Finviz profile for {ticker}...")
+            resp = session.get(url, timeout=15)
+            
+            if resp.status_code == 403:
+                logger.warning(f"Finviz returned 403 for {ticker}. Possible block.")
+                return None
+            resp.raise_for_status()
+            
+            soup = BeautifulSoup(resp.text, 'html.parser')
+            
+            tables = soup.find_all('table', {'class': 'snapshot-table2'})
+            if not tables:
+                tables = soup.find_all('table', class_='snapshot-table2')
+                
+            if not tables:
+                logger.warning(f"No profile table found for {ticker} on Finviz.")
+                return None
+                
+            table = tables[0]
+            rows = table.find_all('tr')
+            
+            profile_data = {"ticker": ticker, "fetched_at": datetime.now().isoformat(), "fields": {}}
+            
+            for row in rows:
+                cols = row.find_all('td')
+                if len(cols) >= 2:
+                    for i in range(0, len(cols), 2):
+                        label = cols[i].text.strip()
+                        value = cols[i+1].text.strip()
+                        if label and value != '-':
+                            profile_data["fields"][label] = value
+                            
+            target_path = self.get_profile_path(ticker)
+            target_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(target_path, 'w', encoding='utf-8') as f:
+                json.dump(profile_data, f, indent=2, ensure_ascii=False)
+                
+            logger.info(f"Saved Finviz profile for {ticker} ({len(profile_data['fields'])} fields).")
+            return profile_data
+            
+        except Exception as e:
+            logger.error(f"Error fetching Finviz for {ticker}: {e}")
+            return None
 
 
 class GlobeNewswireMonitor:
-    """Монитор новостей GlobeNewswire"""
+    """Основной класс монитора."""
     
-    def __init__(self, config: Dict = None):
-        self.config = config or CONFIG
-        self.output_dir = Path(self.config['output_dir'])
-        self.processed_urls: Set[str] = set()
-        self.ticker_db = TickerDatabase(self.config['ticker_db_file'])
+    def __init__(self):
+        self.base_url = "https://www.globenewswire.com"
+        self.session = self._create_session()
         
-        # Настройка логирования
-        self._setup_logging()
+        self.ticker_db = TickerDatabase(CONFIG["dirs"]["data"])
+        self.history = NewsHistory(CONFIG["dirs"]["data"])
+        self.finviz = FinvizScraper(CONFIG["dirs"]["news_root"])
         
-        # Создаем директорию
-        self.output_dir.mkdir(parents=True, exist_ok=True)
+        Path(CONFIG["dirs"]["news_root"]).mkdir(exist_ok=True)
         
-        # Загружаем кэш
-        self._load_processed_urls()
-        
-        # Сессия
-        self.session = requests.Session()
-        self.session.headers.update({
-            'User-Agent': self.config['user_agent'],
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-        })
-    
-    def _setup_logging(self):
-        """Настройка логирования"""
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s - %(levelname)s - %(message)s',
-            handlers=[
-                logging.FileHandler('news_monitor.log'),
-                logging.StreamHandler()
-            ]
-        )
-        self.logger = logging.getLogger(__name__)
-    
-    def _load_processed_urls(self):
-        """Загрузка обработанных URL"""
-        cache_file = self.output_dir / 'processed_urls.json'
-        if cache_file.exists():
-            try:
-                with open(cache_file, 'r') as f:
-                    data = json.load(f)
-                    self.processed_urls = set(data.get('urls', []))
-                    self.logger.info(f"Loaded {len(self.processed_urls)} previously processed URLs")
-            except Exception as e:
-                self.logger.warning(f"Could not load processed URLs cache: {e}")
-    
-    def _save_processed_urls(self):
-        """Сохранение обработанных URL"""
-        cache_file = self.output_dir / 'processed_urls.json'
+    def _create_session(self) -> requests.Session:
+        session = requests.Session()
+        ua = random.choice(USER_AGENTS)
+        session.headers.update(CONFIG["headers_base"])
+        session.headers["User-Agent"] = ua
+        return session
+
+    def refresh_tickers_if_needed(self):
+        """Обновление базы тикеров если устарела."""
+        if self.ticker_db.is_stale():
+            logger.info("Ticker database is stale or missing. Updating...")
+            if self.ticker_db.fetch_from_nasdaq_api():
+                logger.info("Ticker database updated successfully.")
+            else:
+                if self.ticker_db.load():
+                    logger.warning("Failed to update tickers, using cached version.")
+                else:
+                    logger.error("CRITICAL: No ticker database available!")
+                    raise RuntimeError("No ticker database")
+        else:
+            if not self.ticker_db.load():
+                logger.info("Ticker cache file missing. Fetching now...")
+                self.ticker_db.fetch_from_nasdaq_api()
+
+    def get_category_urls(self) -> List[str]:
+        return [f"{self.base_url}{cat}" for cat in CONFIG["urls"]["categories"]]
+
+    def fetch_article_links(self, category_url: str) -> List[str]:
+        links = []
         try:
-            with open(cache_file, 'w') as f:
-                json.dump({'urls': list(self.processed_urls)}, f)
-        except Exception as e:
-            self.logger.error(f"Could not save processed URLs cache: {e}")
-    
-    def get_news_links(self, category_url: str) -> List[Dict[str, str]]:
-        """Получение ссылок на новости"""
-        articles = []
-        
-        try:
-            url = f"{self.config['base_url']}{category_url}"
-            response = self.session.get(url, timeout=30)
-            response.raise_for_status()
+            self.session.headers["User-Agent"] = random.choice(USER_AGENTS)
             
-            soup = BeautifulSoup(response.content, 'lxml')
+            resp = self.session.get(category_url, timeout=CONFIG["limits"]["request_timeout"])
+            if resp.status_code == 403:
+                logger.warning(f"403 Forbidden from {category_url}")
+                return links
+            resp.raise_for_status()
             
-            links = soup.find_all('a', href=re.compile(r'/news-release/\d{4}/\d{2}/\d{2}/'))
+            soup = BeautifulSoup(resp.text, 'html.parser')
             
-            for link in links[:self.config['max_news_per_run'] // len(self.config['news_categories'])]:
-                href = link.get('href', '')
-                if href and href.startswith('/'):
-                    full_url = f"{self.config['base_url']}{href}"
-                    title = link.get_text(strip=True)
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                if '/news-release/' in href or '/release/' in href:
+                    full_url = href if href.startswith('http') else f"{self.base_url}{href}"
+                    links.append(full_url)
                     
-                    if title and full_url not in self.processed_urls:
-                        articles.append({
-                            'url': full_url,
-                            'title': title
-                        })
-            
-            self.logger.info(f"Found {len(articles)} new articles in {category_url}")
+            logger.debug(f"Found {len(links)} links in {category_url}")
             
         except Exception as e:
-            self.logger.error(f"Error fetching news from {category_url}: {e}")
-        
-        return articles
-    
-    def scrape_article(self, url: str) -> Optional[NewsArticle]:
-        """Парсинг статьи"""
-        try:
-            response = self.session.get(url, timeout=30)
-            response.raise_for_status()
+            logger.error(f"Error fetching links from {category_url}: {e}")
             
-            soup = BeautifulSoup(response.content, 'lxml')
+        return list(set(links))
+
+    def scrape_article(self, url: str) -> Optional[Dict[str, Any]]:
+        try:
+            self.session.headers["User-Agent"] = random.choice(USER_AGENTS)
+            resp = self.session.get(url, timeout=CONFIG["limits"]["request_timeout"])
+            resp.raise_for_status()
+            
+            soup = BeautifulSoup(resp.text, 'html.parser')
             
             # Заголовок
-            title_tag = soup.find('h1', class_=re.compile(r'article-title|headline', re.I))
-            if not title_tag:
-                title_tag = soup.find('h1')
-            title = title_tag.get_text(strip=True) if title_tag else "Unknown Title"
+            title_tag = soup.find('h1')
+            title = title_tag.text.strip() if title_tag else "No Title"
             
-            # Дата
-            date_tag = soup.find('div', class_=re.compile(r'date|time|published', re.I))
-            if not date_tag:
-                date_tag = soup.find('time')
-            published_date = date_tag.get_text(strip=True) if date_tag else datetime.utcnow().strftime('%Y-%m-%d')
-            
-            # Источник (КЛЮЧЕВОЙ МОМЕНТ!)
             source_company = None
-            source_label = soup.find(string=re.compile(r"Source:", re.IGNORECASE))
             
-            if source_label:
-                parent = source_label.parent
-                next_sibling = parent.next_sibling
-                if next_sibling:
-                    source_company = next_sibling.strip()
-                else:
-                    full_text = parent.get_text()
-                    if ":" in full_text:
-                        source_company = full_text.split(":", 1)[1].strip()
+            # Метод 1: Ищем в JSON-LD структурированных данных (самый надежный способ)
+            for script in soup.find_all('script', type='application/ld+json'):
+                try:
+                    import json as json_mod
+                    data = json_mod.loads(script.string)
+                    # Проверяем author или publisher
+                    if isinstance(data, dict):
+                        author = data.get('author', {})
+                        if isinstance(author, dict) and 'name' in author:
+                            source_company = author['name']
+                            break
+                        # Проверяем sourceOrganization
+                        source_org = data.get('sourceOrganization', [])
+                        if isinstance(source_org, list) and len(source_org) > 0:
+                            if isinstance(source_org[0], dict) and 'name' in source_org[0]:
+                                source_company = source_org[0]['name']
+                                break
+                except Exception:
+                    continue
             
+            # Метод 2: Ищем в meta теге twitter:site или article:author
             if not source_company:
-                meta_source = soup.find("meta", attrs={"name": "author"})
-                if meta_source:
-                    source_company = meta_source.get("content")
+                meta_author = soup.find('meta', {'name': 'twitter:site'})
+                if meta_author and meta_author.get('content'):
+                    source_company = meta_author['content']
+                    
+            # Метод 3: Ищем в блоке .article-source или .gn-body-notes
+            if not source_company:
+                article_source = soup.find('span', class_='article-source')
+                if article_source:
+                    text = article_source.get_text()
+                    if 'Source:' in text:
+                        parts = text.split('Source:')
+                        if len(parts) > 1:
+                            raw_source = parts[1].strip()
+                            # Берем первую строку
+                            source_company = raw_source.split('\n')[0].strip()
             
-            # Контент
-            content_parts = []
-            content_div = soup.find('div', class_=re.compile(r'article-body|content|release-content', re.I))
-            if not content_div:
-                content_div = soup.find('div', id=re.compile(r'article|content|body', re.I))
+            # Метод 4: Ищем в gn-body-notes
+            if not source_company:
+                body_notes = soup.find('div', class_='gn-body-notes')
+                if body_notes:
+                    text = body_notes.get_text()
+                    if "Source:" in text:
+                        parts = text.split("Source:")
+                        if len(parts) > 1:
+                            raw_source = parts[1].split('\n')[0].strip()
+                            source_company = raw_source.strip()
             
+            # Метод 5: Ищем в meta DCSext.Cluster
+            if not source_company:
+                meta = soup.find('meta', {'name': 'DCSext.Cluster'})
+                if meta and meta.get('content'):
+                    source_company = meta['content']
+            
+            # Текст новости
+            content_div = soup.find('div', class_='gn-article-content') or soup.find('div', id='bodyText')
+            content = ""
             if content_div:
                 paragraphs = content_div.find_all('p')
-                for p in paragraphs:
-                    text = p.get_text(strip=True)
-                    if text:
-                        content_parts.append(text)
+                content = "\n".join([p.get_text(strip=True) for p in paragraphs])
             
-            content = '\n\n'.join(content_parts)
-            
-            if not content:
-                content = soup.get_text(separator='\n', strip=True)
-            
-            article = NewsArticle(
-                title=title,
-                url=url,
-                published_date=published_date,
-                content=content,
-                source_company=source_company or "Unknown"
-            )
-            
-            self.logger.info(f"Scraped: {title[:50]}... | Source: {article.source_company}")
-            return article
+            if not source_company:
+                logger.warning(f"Could not find Source company for {url}")
+                return None
+                
+            return {
+                "url": url,
+                "title": title,
+                "source_company": source_company,
+                "content": content,
+                "scraped_at": datetime.now().isoformat()
+            }
             
         except Exception as e:
-            self.logger.error(f"Error scraping article {url}: {e}")
+            logger.error(f"Error scraping article {url}: {e}")
             return None
-    
-    def process_article(self, article: NewsArticle) -> bool:
-        """Обработка статьи: поиск тикера и сохранение"""
-        if not article.source_company or article.source_company == "Unknown":
-            self.logger.debug(f"No source found, skipping.")
-            return False
-        
-        # Поиск тикера в базе
-        ticker = self.ticker_db.find_ticker(article.source_company)
-        
-        if not ticker:
-            self.logger.info(f"Company '{article.source_company}' NOT found in database. Ignoring.")
-            return False
-        
-        article.ticker = ticker
-        self.logger.info(f"Matched '{article.source_company}' -> Ticker: {ticker}")
-        
-        # Сохранение в файл <TICKER>.txt
-        filename = f"{ticker}.txt"
-        filepath = self.output_dir / filename
-        self._append_to_file(filepath, article)
-        self.logger.info(f"Saved article to {filename}")
-        
-        return True
-    
-    def _append_to_file(self, filepath: Path, article: NewsArticle):
-        """Добавление статьи в файл"""
-        separator = "=" * 80
-        
-        with open(filepath, 'a', encoding='utf-8') as f:
-            f.write(f"\n{separator}\n")
-            f.write(f"DATE: {article.published_date}\n")
-            f.write(f"SOURCE: {article.source_company}\n")
-            f.write(f"TICKER: {article.ticker}\n")
-            f.write(f"TITLE: {article.title}\n")
-            f.write(f"URL: {article.url}\n")
-            f.write(f"SCRAPED AT: {article.scraped_at}\n")
-            f.write(f"{separator}\n\n")
-            f.write(f"{article.content}\n")
-            f.write(f"\n{separator}\n\n")
-    
-    def run_once(self):
-        """Одиночный запуск"""
-        self.logger.info("Starting news monitoring run...")
-        
-        # Проверка базы тикеров
-        if not self.ticker_df or not self.ticker_db.company_to_ticker:
-            if not self.ticker_db.load_local():
-                self.logger.warning("Ticker database empty. Attempting to download...")
-                if not self.ticker_db.download_database():
-                    self.logger.error("Could not initialize ticker database. Exiting.")
-                    return 0
-        
-        all_articles = []
-        
-        for category in self.config['news_categories']:
-            articles = self.get_news_links(category)
-            all_articles.extend(articles)
-        
-        self.logger.info(f"Total articles to process: {len(all_articles)}")
-        
-        processed_count = 0
-        matched_count = 0
-        
-        for article_info in all_articles:
-            if processed_count >= self.config['max_news_per_run']:
-                break
-            
-            url = article_info['url']
-            
-            if url in self.processed_urls:
-                continue
-            
-            article = self.scrape_article(url)
-            
-            if article:
-                processed_count += 1
-                if self.process_article(article):
-                    matched_count += 1
-                
-                self.processed_urls.add(url)
-        
-        self._save_processed_urls()
-        
-        self.logger.info(f"Completed run. Processed {processed_count} articles, matched {matched_count} companies.")
-        return matched_count
-    
-    def run_continuous(self):
-        """Непрерывный мониторинг"""
-        self.logger.info(f"Starting continuous monitoring (every {self.config['check_interval_minutes']} min)")
-        
-        schedule.every(self.config['check_interval_minutes']).minutes.do(self.run_once)
-        
-        self.run_once()
-        
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
-    
-    @property
-    def ticker_df(self):
-        return self.ticker_db.df
 
+    def save_news(self, ticker: str, article: Dict[str, Any]):
+        ticker_dir = Path(CONFIG["dirs"]["news_root"]) / ticker
+        ticker_dir.mkdir(parents=True, exist_ok=True)
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        url_hash = hashlib.md5(article['url'].encode()).hexdigest()[:6]
+        filename = f"news_{timestamp}_{url_hash}.json"
+        filepath = ticker_dir / filename
+        
+        data = {
+            "ticker": ticker,
+            "company": article['source_company'],
+            "title": article['title'],
+            "url": article['url'],
+            "content": article['content'],
+            "received_at": datetime.now().isoformat()
+        }
+        
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+            
+        logger.info(f"Saved news to {filepath}")
+        
+        if self.finviz.should_update(ticker):
+            self.finviz.fetch(ticker)
+        else:
+            logger.debug(f"Finviz profile for {ticker} is up-to-date (cached).")
+
+    def run_burst_check(self):
+        self.refresh_tickers_if_needed()
+        
+        categories = self.get_category_urls()
+        total_new_found = 0
+        
+        logger.info("Starting news scan...")
+        new_links = set()
+        
+        for cat_url in categories:
+            links = self.fetch_article_links(cat_url)
+            for link in links:
+                if not self.history.is_processed(link):
+                    new_links.add(link)
+        
+        if not new_links:
+            logger.info("No new news found.")
+            return 0
+            
+        logger.info(f"Found {len(new_links)} new articles. Processing...")
+        
+        burst_rounds = 0
+        while burst_rounds < CONFIG["limits"]["max_burst_checks"]:
+            processed_count = 0
+            for url in list(new_links):
+                article = self.scrape_article(url)
+                if article:
+                    ticker = self.ticker_db.find_ticker(article['source_company'])
+                    if ticker:
+                        logger.info(f"Matched '{article['source_company']}' -> {ticker}")
+                        self.save_news(ticker, article)
+                        self.history.add(url)
+                        processed_count += 1
+                    else:
+                        logger.info(f"Company '{article['source_company']}' not in DB. Ignoring.")
+                        self.history.add(url)
+                else:
+                    self.history.add(url)
+            
+            total_new_found += processed_count
+            new_links.clear()
+            
+            if processed_count > 0 or burst_rounds == 0:
+                burst_rounds += 1
+                if burst_rounds < CONFIG["limits"]["max_burst_checks"]:
+                    wait_time = CONFIG["limits"]["burst_delay_sec"] + random.uniform(0.2, 0.5)
+                    logger.info(f"Burst mode: waiting {wait_time:.2f}s before next check (Round {burst_rounds})...")
+                    time.sleep(wait_time)
+                    
+                    for cat_url in categories:
+                        links = self.fetch_article_links(cat_url)
+                        for link in links:
+                            if not self.history.is_processed(link):
+                                new_links.add(link)
+                    
+                    if not new_links:
+                        logger.info("Burst check: no more new links.")
+                        break
+                else:
+                    break
+            else:
+                break
+                
+        self.history.save()
+        logger.info(f"Run finished. Processed {total_new_found} new articles.")
+        return total_new_found
 
 def main():
-    import argparse
-    
-    parser = argparse.ArgumentParser(description='GlobeNewswire News Monitor (Source-based)')
-    parser.add_argument('--once', action='store_true', help='Run once and exit')
-    parser.add_argument('--interval', type=int, default=5, help='Check interval in minutes')
-    parser.add_argument('--output-dir', type=str, default='./news_output', help='Output directory')
-    parser.add_argument('--update-tickers', action='store_true', help='Force update ticker database')
-    parser.add_argument('--categories', nargs='+', help='News categories to monitor')
-    
-    args = parser.parse_args()
-    
-    config = CONFIG.copy()
-    config['check_interval_minutes'] = args.interval
-    config['output_dir'] = args.output_dir
-    
-    if args.categories:
-        config['news_categories'] = args.categories
-    
-    monitor = GlobeNewswireMonitor(config)
-    
-    if args.update_tickers:
-        monitor.ticker_db.download_database()
-        return
-    
-    if args.once:
-        count = monitor.run_once()
-        print(f"\nProcessed. Matched {count} companies. Check {args.output_dir} for files.")
-    else:
-        print(f"Starting continuous monitoring...")
-        print(f"Output directory: {args.output_dir}")
-        print(f"Check interval: {args.interval} minutes")
-        print("Press Ctrl+C to stop\n")
-        monitor.run_continuous()
+    try:
+        monitor = GlobeNewswireMonitor()
+        monitor.run_burst_check()
+    except KeyboardInterrupt:
+        logger.info("Stopped by user.")
+    except Exception as e:
+        logger.exception(f"Critical error: {e}")
+        sys.exit(1)
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
