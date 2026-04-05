@@ -1,22 +1,27 @@
 ```
+# Logs
+*.log
+
+# Database files
+*.csv
+*.json
+
+# Environment
+.env
+.env.local
+.env.*
+
 # Dependencies
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Logs and temp files
-*.log
+# Temp files
 *.tmp
+*.temp
 
-# Environment
-.env
-.env.local
-*.env.*
-
-# Data files that might be generated
-data/debug_*.json
-data/last_ticker_update.txt
-data/processed_news.json
-news_output/
+# OS generated files
+.DS_Store
+Thumbs.db
 ```
