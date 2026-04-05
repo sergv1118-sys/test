@@ -1,0 +1,155 @@
+2026-04-05 18:09:08,114 - INFO - No history file found. Starting fresh.
+2026-04-05 18:09:08,114 - INFO - Ticker database is stale or missing. Updating...
+2026-04-05 18:09:08,115 - INFO - Fetching NASDAQ data...
+2026-04-05 18:09:11,811 - INFO - Got 4057 rows from NASDAQ
+2026-04-05 18:09:11,811 - INFO - Fetching NYSE data...
+2026-04-05 18:09:14,272 - INFO - Got 2702 rows from NYSE
+2026-04-05 18:09:14,272 - INFO - Fetching AMEX data...
+2026-04-05 18:09:15,652 - INFO - Got 295 rows from AMEX
+2026-04-05 18:09:15,833 - INFO - Saved 7045 tickers to cache.
+2026-04-05 18:09:15,836 - INFO - Ticker database updated successfully.
+2026-04-05 18:09:15,836 - INFO - Starting news scan...
+2026-04-05 18:09:17,860 - ERROR - Error fetching links from https://www.globenewswire.com/news/healthcare-pharmaceuticals: 404 Client Error: Not Found for url: https://www.globenewswire.com/news/healthcare-pharmaceuticals
+2026-04-05 18:09:19,413 - INFO - No new news found.
+2026-04-05 18:09:42,951 - INFO - No history file found. Starting fresh.
+2026-04-05 18:09:42,990 - INFO - Loaded 7045 tickers from cache.
+2026-04-05 18:09:42,990 - INFO - Starting news scan...
+2026-04-05 18:09:43,934 - INFO - No new news found.
+2026-04-05 18:09:58,973 - INFO - No history file found. Starting fresh.
+2026-04-05 18:09:59,011 - INFO - Loaded 7045 tickers from cache.
+2026-04-05 18:09:59,011 - INFO - Starting news scan...
+2026-04-05 18:10:00,535 - INFO - Found 60 new articles. Processing...
+2026-04-05 18:10:00,993 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268206/0/en/Crypto-News-Pepeto-Crypto-Bridge-Update-While-Bitcoin-Price-Might-Reach-A-New-ATH.html
+2026-04-05 18:10:01,951 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268070/0/fr/SOITEC-INFORMATION-RELATIVE-AU-NOMBRE-TOTAL-DE-DROITS-DE-VOTE-ET-D-ACTIONS-COMPOSANT-LE-CAPITAL-SOCIAL.html
+2026-04-05 18:10:02,894 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268071/0/nl/Participatiemeldingen-van-Citigroup-Inc.html
+2026-04-05 18:10:03,853 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268189/0/en/ThinkCareBelieve-Week-63-of-the-Trump-2-0-Administration.html
+2026-04-05 18:10:04,792 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268090/0/en/Proposed-appointment-to-the-Board-of-Directors-at-the-Annual-General-Meeting-on-May-21st-2026-Thierry-Fournier-candidate-director-Appointed-censor-with-immediate-effect.html
+2026-04-05 18:10:05,039 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268139/0/en/ORIC-Pharmaceuticals-Reports-Inducement-Grants-under-Nasdaq-Listing-Rule-5635-c-4.html
+2026-04-05 18:10:05,290 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268133/0/en/Spyre-Therapeutics-Announces-Grants-of-Inducement-Awards.html
+2026-04-05 18:10:05,674 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268118/0/en/DBM-Global-to-Pay-Cash-Dividend.html
+2026-04-05 18:10:06,620 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/02/3267874/31758/en/Mattr-Announces-Closing-of-Credit-Facility-Extension.html
+2026-04-05 18:10:07,136 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268071/0/en/Participation-notifications-by-Citigroup-Inc.html
+2026-04-05 18:10:07,378 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268141/0/en/Xilio-Therapeutics-Announces-Inducement-Grants-Under-Nasdaq-Listing-Rule-5635-c-4.html
+2026-04-05 18:10:08,819 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268131/0/en/First-Hawaiian-to-Report-First-Quarter-2026-Financial-Results-on-April-24-2026.html
+2026-04-05 18:10:09,263 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/02/3267853/0/en/Range-Announces-Conference-Call-to-Discuss-First-Quarter-2026-Financial-Results.html
+2026-04-05 18:10:09,513 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268134/0/en/Syndax-Pharmaceuticals-Reports-Inducement-Grants-Under-NASDAQ-Listing-Rule-5635-c-4.html
+2026-04-05 18:10:10,194 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268140/0/en/AIOS-Tech-Inc-Announces-Receipt-of-Nasdaq-Notification-Regarding-Minimum-Bid-Price-Deficiency.html
+2026-04-05 18:10:10,950 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268198/0/en/Free-Spins-No-Deposit-Casino-Bonus-2026-Online-Casino-Real-Money-No-Deposit-By-My-Bookie.html
+2026-04-05 18:10:11,814 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268195/0/en/Ledruval-Unveiled-Is-Ledruval-Trading-Platform-Legit-Official-Insights-Features-User-Feedback.html
+2026-04-05 18:10:12,818 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268215/0/en/New-Crypto-Pepeto-Announces-8-7M-Raised-While-Ethereum-Price-Prediction-Just-Got-A-New-Boost.html
+2026-04-05 18:10:13,074 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268135/0/en/Intellia-Therapeutics-Reports-Inducement-Grants-Under-Nasdaq-Listing-Rule-5635-c-4.html
+2026-04-05 18:10:13,717 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268188/32716/en/KD-9-DAY-DEADLINE-ALERT-Kyndryl-KD-Facing-Securities-Class-Action-Amid-55-Stock-Drop-After-Four-Bombshell-Disclosures-Hagens-Berman.html
+2026-04-05 18:10:14,838 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268003/0/en/Technology-Aloha-Maui-Food-Bank-Website-Named-Webby-Award-Nominee-Community-Can-Vote-to-Win-Internet-s-Top-Honor.html
+2026-04-05 18:10:15,298 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268142/0/en/Midland-States-Bancorp-Inc-To-Announce-First-Quarter-2026-Financial-Results-On-Thursday-April-23.html
+2026-04-05 18:10:15,859 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268150/937/en/COTY-SHAREHOLDER-ALERT-Securities-Fraud-Lawsuit-Filed-on-Behalf-of-Coty-Inc-Investors-Contact-Kirby-McInerney-LLP-by-May-22-2026.html
+2026-04-05 18:10:16,615 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268123/7677/en/RCM-Technologies-Inc-Announces-Fourth-Quarter-And-Fiscal-Year-2025-Results.html
+2026-04-05 18:10:17,052 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/05/3268220/0/en/Pepeto-Presale-Demand-Grows-While-Dogecoin-Price-Prediction-Shifts-After-Crypto-News-Confirms-X-Money-Launch-Without-DOGE.html
+2026-04-05 18:10:18,300 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268191/0/en/Bitcoin-Casino-No-Deposit-Bonus-2026-BitStarz-Introduces-50-Free-Spins-No-Deposit-Bonus-with-Fast-Withdrawals.html
+2026-04-05 18:10:19,350 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3267947/0/en/Convening-Notice-to-Syensqo-Ordinary-Shareholders-Meeting.html
+2026-04-05 18:10:19,572 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268130/0/en/IN8bio-Reports-Inducement-Grant-Under-Nasdaq-Listing-Rule-5635-c-4.html
+2026-04-05 18:10:19,972 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268163/937/en/PSIX-INVESTOR-REMINDER-Power-Solutions-International-Inc-Investors-Have-Until-May-19-2026-To-Seek-Lead-Plaintiff-Role-Contact-Kirby-McInerney-LLP.html
+2026-04-05 18:10:20,773 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268202/0/en/Alicia-Basir-s-April-Love-Ritual-Reconnects-Sweethearts-for-2026-Wedding.html
+2026-04-05 18:10:21,132 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268187/32716/en/QURE-9-DAY-DEADLINE-ALERT-Hagens-Berman-Updates-uniQure-QURE-Investigation-Following-Public-FDA-Rebukes-and-Allegations-of-Distorted-Data.html
+2026-04-05 18:10:22,074 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268146/28467/en/Anika-Reports-Inducement-Grants-Under-Nasdaq-Listing-Rule-5635-c-4.html
+2026-04-05 18:10:22,939 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268136/0/en/AEON-Biopharma-Receives-Additional-Notice-Related-to-NYSE-American-Continued-Listing-Standards.html
+2026-04-05 18:10:23,341 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/02/3267869/0/en/2026-Annual-General-Meeting.html
+2026-04-05 18:10:24,054 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268213/0/en/New-platform-Suomi-kasinot-fi-launches-to-simplify-online-casino-choices-for-Finnish-players.html
+2026-04-05 18:10:24,477 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268197/0/en/HDFC-ERGO-Shares-Tips-on-Keeping-Your-No-Claim-Bonus-Growing-for-Bigger-Long-Term-Savings.html
+2026-04-05 18:10:25,460 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268159/0/en/Data-Breach-Alert-Edelson-Lechtzin-LLP-Investigates-Hims-Hers-Inc-Data-Breach.html
+2026-04-05 18:10:26,192 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/02/3267694/0/fr/Umicore-D%C3%A9claration-de-transparence-par-BlackRock-Inc.html
+2026-04-05 18:10:26,697 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268070/0/en/SOITEC-INFORMATION-RELATING-TO-THE-TOTAL-NUMBER-OF-VOTING-RIGHTS-AND-SHARES-FORMING-THE-SHARE-CAPITAL.html
+2026-04-05 18:10:27,577 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268148/32419/en/Matinas-BioPharma-Receives-Notice-of-Non-Compliance-with-NYSE-American-Continued-Listing-Standards.html
+2026-04-05 18:10:28,335 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/02/3267694/0/en/Umicore-Transparency-notification-by-BlackRock-Inc.html
+2026-04-05 18:10:29,116 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268183/0/en/TitanPlay-Explores-the-Role-of-Friction-in-Supporting-Responsible-Gambling-Behavior-in-Ontario.html
+2026-04-05 18:10:29,774 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268157/0/en/MCG-Tactical-The-Stinger-Claims-Evaluated-The-Covert-Stinger-Combat-Optic-Sight-Enhancer-for-Tactical-Reflex-Shooting-Performance.html
+2026-04-05 18:10:30,877 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268162/937/en/ATRA-SHAREHOLDER-ALERT-Securities-Fraud-Lawsuit-Filed-on-Behalf-of-Atara-Biotherapeutics-Inc-Investors-Contact-Kirby-McInerney-LLP-by-May-22-2026.html
+2026-04-05 18:10:31,417 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268156/0/en/H2-Water-Technologies-Ltd-Announces-Issuance-of-Key-U-S-Patent-for-Producing-Hydrogen-Rich-Water-Identifies-Echo-Water-s-Hydrogen-Prebiotic-Stick-as-Infringing-Product.html
+2026-04-05 18:10:32,099 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268181/0/en/Wall-Street-s-Worst-Quarter-Since-2022-Puts-Bitcoin-Everlight-s-Fee-Based-Model-in-Focus.html
+2026-04-05 18:10:32,692 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268086/14858/en/Former-Sen-Sam-Nunn-Visits-Ingalls-Shipbuilding-for-Update-on-His-Namesake-Destroyer.html
+2026-04-05 18:10:33,252 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268090/0/fr/Proposition-de-nomination-%C3%A0-l-Assembl%C3%A9e-G%C3%A9n%C3%A9rale-du-21-mai-2026-Thierry-Fournier-candidat-administrateur-Nomm%C3%A9-censeur-avec-effet-imm%C3%A9diat.html
+2026-04-05 18:10:33,699 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268097/0/en/GAMIVO-Unveils-Analysis-on-2026-s-Most-Popular-Video-Game-Genres.html
+2026-04-05 18:10:34,196 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268212/0/en/Warm-Home-Grant-Millions-of-English-Homeowners-Could-Claim-Free-Energy-Upgrades-Under-New-Scheme.html
+2026-04-05 18:10:35,132 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268214/0/en/Pepeto-Announces-Binance-Listing-Progress-While-Markets-Wait-For-XRP-Price-To-Reach-The-10-Mark-Crypto-News.html
+2026-04-05 18:10:36,514 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268154/937/en/DRVN-INVESTOR-ALERT-Contact-Kirby-McInerney-LLP-About-Securities-Class-Action-Lawsuit-On-Behalf-of-Driven-Brands-Holdings-Inc-Investors.html
+2026-04-05 18:10:37,173 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268176/0/en/HiWell-Absorfyx-Launches-Advanced-Saw-Palmetto-Formula-for-Prostate-Urinary-and-Hair-Health.html
+2026-04-05 18:10:37,675 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268138/0/en/FAR-AI-Opens-Node-Registrations-Giving-GPU-Owners-a-New-Way-to-Earn-From-AI-Demand.html
+2026-04-05 18:10:38,914 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/02/3267694/0/nl/Umicore-Transparantieverklaring-van-BlackRock-Inc.html
+2026-04-05 18:10:39,157 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268199/0/en/Vapofil-Claims-Evaluated-2026-Report-on-Vapofil-Ingredients-Pricing-and-What-Consumers-Should-Verify-Before-Purchasing.html
+2026-04-05 18:10:40,091 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268071/0/fr/Notifications-de-participation-par-Citigroup-Inc.html
+2026-04-05 18:10:41,170 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268180/0/en/MetaSoilVerse-Protocol-Brings-RWA-Infrastructure-On-Chain-with-LBank-Listing.html
+2026-04-05 18:10:42,499 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/03/3268137/0/en/AEON-Biopharma-Reports-Inducement-Grants-Under-NYSE-American-LLC-Company-Guide-Section-711.html
+2026-04-05 18:10:42,956 - WARNING - Could not find Source company for https://www.globenewswire.com/news-release/2026/04/04/3268201/0/en/EMSense-Foot-Massager-Claims-Evaluated-The-At-Home-Triple-Massaging-Technology-for-Healthy-Feet-Support.html
+2026-04-05 18:10:42,956 - INFO - Burst mode: waiting 1.84s before next check (Round 1)...
+2026-04-05 18:10:48,035 - INFO - Burst check: no more new links.
+2026-04-05 18:10:48,036 - INFO - Run finished. Processed 0 new articles.
+2026-04-05 18:11:19,157 - INFO - Loaded 60 processed URLs from history.
+2026-04-05 18:11:19,210 - INFO - Loaded 7045 tickers from cache.
+2026-04-05 18:11:19,211 - INFO - Starting news scan...
+2026-04-05 18:11:19,797 - INFO - No new news found.
+2026-04-05 18:11:23,618 - INFO - No history file found. Starting fresh.
+2026-04-05 18:11:23,659 - INFO - Loaded 7045 tickers from cache.
+2026-04-05 18:11:23,659 - INFO - Starting news scan...
+2026-04-05 18:11:24,153 - INFO - Found 60 new articles. Processing...
+2026-04-05 18:11:25,054 - INFO - Company 'ThinkCareBelieve' not in DB. Ignoring.
+2026-04-05 18:11:25,334 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:25,379 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:26,630 - INFO - Company 'SOITEC' not in DB. Ignoring.
+2026-04-05 18:11:28,280 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:29,171 - INFO - Company 'Pepeto' not in DB. Ignoring.
+2026-04-05 18:11:30,511 - INFO - Company 'Nexans' not in DB. Ignoring.
+2026-04-05 18:11:30,571 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:30,633 - INFO - Company 'Kirby McInerney LLP' not in DB. Ignoring.
+2026-04-05 18:11:30,692 - INFO - Company 'Vapofil' not in DB. Ignoring.
+2026-04-05 18:11:31,874 - INFO - Company 'Solvay S.A.' not in DB. Ignoring.
+2026-04-05 18:11:31,975 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:33,082 - INFO - Company 'Pepeto' not in DB. Ignoring.
+2026-04-05 18:11:34,032 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:34,097 - INFO - Company 'Pepeto' not in DB. Ignoring.
+2026-04-05 18:11:34,956 - INFO - Company 'Midland States Bancorp, Inc.' not in DB. Ignoring.
+2026-04-05 18:11:35,938 - INFO - Company 'UK Warm Home Grant' not in DB. Ignoring.
+2026-04-05 18:11:36,959 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:37,730 - INFO - Company 'Kirby McInerney LLP' not in DB. Ignoring.
+2026-04-05 18:11:39,093 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:40,397 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:41,252 - INFO - Company 'Solvay S.A.' not in DB. Ignoring.
+2026-04-05 18:11:42,234 - INFO - Company 'HDFC Ergo' not in DB. Ignoring.
+2026-04-05 18:11:42,454 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:43,779 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:44,734 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:45,631 - INFO - Company 'GAMIVO' not in DB. Ignoring.
+2026-04-05 18:11:46,398 - INFO - Company 'Golar LNG' not in DB. Ignoring.
+2026-04-05 18:11:47,492 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:48,438 - INFO - Company 'Nexans' not in DB. Ignoring.
+2026-04-05 18:11:49,198 - INFO - Company 'Pepeto' not in DB. Ignoring.
+2026-04-05 18:11:49,655 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:50,534 - INFO - Company 'Technology Aloha LLC' not in DB. Ignoring.
+2026-04-05 18:11:51,392 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:51,632 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:53,290 - INFO - Company 'Kirby McInerney LLP' not in DB. Ignoring.
+2026-04-05 18:11:54,117 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:55,339 - INFO - Company 'EMSense' not in DB. Ignoring.
+2026-04-05 18:11:55,879 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:56,797 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:11:57,259 - INFO - Company 'Umicore' not in DB. Ignoring.
+2026-04-05 18:11:57,797 - INFO - Company 'MyBookie' not in DB. Ignoring.
+2026-04-05 18:11:58,636 - INFO - Company 'Umicore' not in DB. Ignoring.
+2026-04-05 18:12:00,452 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:12:01,157 - INFO - Company 'Suomi-kasinot' not in DB. Ignoring.
+2026-04-05 18:12:02,298 - INFO - Company 'Solvay S.A.' not in DB. Ignoring.
+2026-04-05 18:12:03,271 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:12:04,431 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:12:05,810 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:12:07,014 - INFO - Company 'Syensqo SA' not in DB. Ignoring.
+2026-04-05 18:12:07,793 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:12:08,017 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:12:08,812 - INFO - Company 'Umicore' not in DB. Ignoring.
+2026-04-05 18:12:09,298 - INFO - Company 'MCG Tactical' not in DB. Ignoring.
+2026-04-05 18:12:10,234 - INFO - Company 'DBM Global Inc.' not in DB. Ignoring.
+2026-04-05 18:12:11,051 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:12:11,311 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:12:12,017 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:12:12,756 - INFO - Company 'SOITEC' not in DB. Ignoring.
+2026-04-05 18:12:14,039 - INFO - Company 'globenewswire' not in DB. Ignoring.
+2026-04-05 18:12:14,039 - INFO - Burst mode: waiting 1.90s before next check (Round 1)...
+2026-04-05 18:12:19,856 - INFO - Burst check: no more new links.
+2026-04-05 18:12:19,857 - INFO - Run finished. Processed 0 new articles.
